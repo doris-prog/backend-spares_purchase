@@ -1,0 +1,25 @@
+{{#extends "base"}}
+{{#block "content"}}
+<h1>Add New Order List</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label>Ordered Quantity </label>
+    <input type="text" class="form-control" name="ordered_quantity">
+  </div>
+    <div class="mb-3">
+    <label>Unit Price</label>
+    <input type="text" class="form-control" name="unit_price">
+  </div>
+    <div class="mb-3">
+    <label>Product Weight</label>
+    <input type="text" class="form-control" name="product_weight">
+  </div>
+    <div class="mb-3">
+    <label>Product Size</label>
+    <input type="text" class="form-control" name="product_size">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Add New Product</button>
+</form>
+{{/block}}  
+{{/extends}}

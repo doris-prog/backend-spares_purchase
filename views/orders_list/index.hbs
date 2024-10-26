@@ -1,0 +1,17 @@
+{{#extends "base"}}
+{{#block"content"}}
+<h1>Quotation Information</h1>
+<table class="table">
+    <tr>
+        <th>Quoted Date</th>
+        <th>Validity Date</th>
+    </tr>
+    {{#each quotation}}
+    <tr>
+        <td>{{ordered_quantity}}</td>
+        <td>{{unit_price}}</td>
+    </tr>
+    {{/each}}
+</table>
+{{/block}}
+{{/extends}}

@@ -1,0 +1,32 @@
+{{#extends "base"}}
+{{#block "content"}}
+<h1>Add New Confirmed Order</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label>Fulfillment Date</label>
+    <input type="text" class="form-control" name="fulfillment_date">
+  </div>
+    <div class="mb-3">
+    <label>Ordered Amount</label>
+    <input type="text" class="form-control" name="ordered_amount">
+  </div>
+    <div class="mb-3">
+    <label>Required Date</label>
+    <input type="text" class="form-control" name="required_date">
+  </div>
+    <div class="mb-3">
+    <label>Delivery Mode </label>
+    <input type="text" class="form-control" name="delivery_mode">
+  </div>
+    <div class="mb-3">
+    <label>Quote ID</label>
+    <select name="quote_id" class="form-control">
+    {{#each quotation}}
+    <option value="{{quote_id}}">{{name}}</option>
+    {{/each}}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Add confirmed order</button>
+</form>
+{{/block}}  
+{{/extends}}

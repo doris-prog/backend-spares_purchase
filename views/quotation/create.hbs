@@ -1,0 +1,39 @@
+{{#extends "base"}}
+{{#block "content"}}
+<h1>Add New Quotation</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label>Quoted Date</label>
+    <input type="text" class="form-control" name="quoted_date">
+  </div>
+    <div class="mb-3">
+    <label>Validity Date</label>
+    <input type="text" class="form-control" name="validity_date">
+  </div>
+    <div class="mb-3">
+    <label>Quoted Amount</label>
+    <input type="text" class="form-control" name="quoted_amount">
+  </div>
+    <div class="mb-3">
+    <label>Quoted Quantity</label>
+    <input type="text" class="form-control" name="quoted_quantity">
+  </div>
+    <div class="mb-3">
+    <label>Customer ID</label>
+    <select name="customer_id" class="form-control">
+    {{#each quotation}}
+    <option value="{{customer_id}}">{{name}}</option>
+    {{/each}}
+    </select>
+  </div>
+  <label>Product ID</label>
+    <select name="product_id" class="form-control">
+    {{#each quotation}}
+    <option value="{{product_id}}">{{name}}</option>
+    {{/each}}
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Add New Quotation</button>
+</form>
+{{/block}}  
+{{/extends}}
