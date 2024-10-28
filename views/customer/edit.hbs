@@ -17,13 +17,17 @@
         <label>Email</label>
         <input type="text" class="form-control" name="email" value="{{customer.email}}">
     </div>
+        <div class="mb-3">
+        <label>Contact Number</label>
+        <input type="text" class="form-control" name="contact_number" value="{{customer.contact_number}}">
+    </div>
     <div class="mb-3">
         <label>Company</label>
         <select name="company_id" class="form-control">
             {{#each company}}
                 <option value="{{company_id}}" 
                 {{#eq company_id ../customer.company_id}}selected{{/eq}}>
-                    {{name}}</option>
+                    {{company_name}}</option>
             {{/each}}
         </select>
     </div>

@@ -28,16 +28,19 @@ async function main() {
     'password': process.env.DB_PASSWORD
   });
 
-  app.get('/', (req, res) => {
-    res.send('Hello, World!');
+  // app.get('/', (req, res) => {
+  //   res.send('Hello, World!');
+  // });
+
+  app.get('/', async (req, res) => {
+    const [company] = await connection.execute('SELECT * FROM company');
+    const [customer] = await connection.execute('SELECT * FROM customer INNER JOIN company ON customer.company_id = company.company_id ORDER BY first_name ASC');
+    res.render('layouts/base', {
+      company,
+      customer
+    })
   });
 
-  app.get('/test', async (req, res) => {
-    const [company] = await connection.execute('SELECT * FROM company');
-    res.send(company);
-  })
-
-  // show all customers in a table 
   app.get('/customer', async (req, res) => {
     const [customer] = await connection.execute('SELECT * FROM customer INNER JOIN company ON customer.company_id = company.company_id ORDER BY first_name ASC');
     res.render('customer', {
@@ -45,47 +48,108 @@ async function main() {
     })
   });
 
-  //   app.get('/quotation', async (req, res) => {
-  //     const [quotation] = await connection.execute('SELECT * FROM quotation INNER JOIN customer ON quotation.customer_id = customer.customer_id');
-  //     res.render('quotation/index', {
-  //     quotation
-  //     })
-  //   });
-
-  app.get('/customer/create', async (req, res) => {
-    const [company] = await connection.execute(`SELECT * FROM company`);
-    // const [customer] = await connection.execute(`SELECT * FROM customer`);
-    res.render('customer/create', {
-      company,
-      // customer
+  app.get('/quotation', async (req, res) => {
+    const [quotation] = await connection.execute('SELECT * FROM quotation INNER JOIN customer ON quotation.customer_id = customer.customer_id');
+    res.render('quotation/index', {
+      quotation
     })
   });
 
-  app.post('customer/create', async (req, res) => {
+  app.get('/customer/create', async (req, res) => {
+    const [company] = await connection.execute(`SELECT * FROM company`);
+    const [customer] = await connection.execute(`SELECT * FROM customer`);
+    res.render('customer/create', {
+      company,
+      customer
+    })
+  });
+
+  app.post('/customer/create', async (req, res) => {
     const { first_name, last_name, email, contact_number, company_id } = req.body;
     const query = 'INSERT INTO customer (first_name, last_name, email, contact_number, company_id) VALUES (?, ?, ?, ?, ?)';
     const bindings = [first_name, last_name, email, contact_number, company_id];
     await connection.execute(query, bindings);
     res.redirect('/customer');
-  })
+  });
 
   app.get('/customer/:customer_id/edit', async (req, res) => {
-    const [customers] = await connection.execute('SELECT * from customer WHERE customer_id = ?', [req.params.customer_id]);
+    const [customers] = await connection.execute('SELECT * from customer WHERE customer_id=?', [req.params.customer_id]);
     const [company] = await connection.execute('SELECT * from company');
     const customer = customers[0];
     res.render('customer/edit', {
-      customer,
-      company
-    })
-  })
+        customer,
+        company
+    });
+});
 
-  app.post('/customer/:customer_id/edit', async (req, res) => {
-    const { first_name, last_name, email, contact_number, company_id } = req.body;
-    const query = 'UPDATE Customers SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
-    const bindings = [first_name, last_name, email, contact_number, company_id, req.params.customer_id];
-    await connection.execute(query, bindings);
-    res.redirect('/customer');
-  })
+app.post('/customer/:customer_id/edit', async (req, res) => {
+  const { first_name, last_name, email, contact_number, company_id } = req.body;
+
+  // Log the received company_id for debugging
+  // console.log("Received company_id:", company_id);
+
+  // Convert company_id to a number if it's coming as a string
+  const parsedCompanyId = Number(company_id);
+
+  // Check if parsedCompanyId is a valid number
+  if (isNaN(parsedCompanyId)) {
+      return res.status(400).send('company_id must be a valid integer');
+  }
+
+  const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
+  const bindings = [first_name, last_name, email, contact_number, parsedCompanyId, req.params.customer_id];
+
+  try {
+      await connection.execute(query, bindings);
+      res.redirect('/customer');
+  } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).send('An error occurred while updating the customer');
+  }
+});
+
+// app.post('/customer/:customer_id/edit', async (req, res) => {
+//     const { first_name, last_name, email, contact_number, company_id } = req.body;
+
+//     // Ensure company_id is a valid integer if it's coming as a JSON string
+//     let parsedCompanyId;
+//     try {
+//         parsedCompanyId = JSON.parse(company_id)[0]; // Assuming company_id might be in the format '["2007"]'
+//     } catch (error) {
+//         return res.status(400).send('Invalid company_id format');
+//     }
+
+//     // Check if parsedCompanyId is a valid number
+//     if (isNaN(parsedCompanyId)) {
+//         return res.status(400).send('company_id must be a valid integer');
+//     }
+
+//     const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
+//     const bindings = [first_name, last_name, email, contact_number, parsedCompanyId, req.params.customer_id];
+
+//     await connection.execute(query, bindings);
+//     res.redirect('/customer');
+// });
+
+  // app.get('/customer/:customer_id/edit', async (req, res) => {
+  //   const [customers] = await connection.execute('SELECT * from customer WHERE customer_id=?', [req.params.customer_id]);
+  //   const [company] = await connection.execute('SELECT * from company');
+  //   const customer = customers[0];
+  //   res.render('customer/edit', {
+  //     customer,
+  //     company
+  //   })
+  // });
+
+  // app.post('/customer/:customer_id/edit', async (req, res) => {
+  //   const { first_name, last_name, email, contact_number, company_id } = req.body;
+  //   // console.log("edit body >>> ", req.body);
+  //   // console.log("customer id >>> ", req.params.customer_id);
+  //   const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
+  //   const bindings = [first_name, last_name, email, contact_number, company_id, [req.params.customer_id]];
+  //   await connection.execute(query, bindings);
+  //   res.redirect('/customer');
+  // });
 
   app.get('/customer/:customer_id/delete', async (req, res) => {
     const [customers] = await connection.execute("SELECT * FROM customer WHERE customer_id = ?", [req.params.customer_id]);
@@ -97,43 +161,8 @@ async function main() {
 
   app.post('/customer/:customer_id/delete', async function (req, res) {
     await connection.execute(`DELETE FROM customer WHERE customer_id = ?`, [req.params.customer_id]);
-    res.redirect('/customers');
-  })
-
-  //   app.get('/customer/create', async (req, res) => {
-  //     const [company] = await connection.execute(`SELECT * FROM company`);
-  //     res.render('customer/create', {
-  //       company
-  //     })
-  //   });
-
-  //   app.get('/customer/create', async (req, res) =>  {
-  //     const [customer] = await connection.execute(`SELECT * FROM customer`);
-  //     res.render('customer/create', {
-  //       customer
-  //     })
-  //   });
-
-  //   app.get('/inventory/create', async (req, res) =>  {
-  //     const [inventory] = await connection.execute(`SELECT * FROM inventory`);
-  //     res.render('inventory/create', {
-  //       inventory
-  //     })
-  //   });
-
-  //   app.get('/confirmed_orders/create', async (req, res) =>  {
-  //     const [confirmed_orders] = await connection.execute(`SELECT * FROM confirmed_orders`);
-  //     res.render('confirmed_orders/create', {
-  //       confirmed_orders
-  //     })
-  //   });
-
-  //   app.get('/ordered_list/create', async (req, res) =>  {
-  //     const [ordered_list] = await connection.execute(`SELECT * FROM ordered_list`);
-  //     res.render('ordered_list/create', {
-  //       ordered_list
-  //     })
-  //   });
+    res.redirect('/customer');
+  });
 }
 
 main();

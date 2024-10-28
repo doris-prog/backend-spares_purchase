@@ -2,7 +2,7 @@
 
 {{#block "content"}}
 
-<h1>Add a New Customer</h1>
+<h1>Add New Customer</h1>
 
 <form method="POST">
   <div class="mb-3">
@@ -25,7 +25,7 @@
     <label>Company</label>
     <select name="company_id" class="form-control">
     {{#each company}}
-    <option value="{{company_id}}">{{name}}</option>
+    <option value="{{company_id}}">{{company_name}}</option>
     {{/each}}
     </select>
   </div>
