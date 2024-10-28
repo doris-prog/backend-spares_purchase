@@ -20,20 +20,26 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/customer">Customer</a>
+              <a class="nav-link active" aria-current="page" href="/">Full summary details</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/quotation">Quotation</a>
+              <a class="nav-link" href="/company">Company List</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/confirmed_orders">Confirmed Orders</a>
+              <a class="nav-link" href="/customer">Customer List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/quotation">Quotation List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/confirmed_orders">Confirmed Orders List</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/orders_list">Orders List</a>
             </li>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/inventory">Inventory</a>
+              <a class="nav-link" href="/inventory">Products Inventory List</a>
             </li>
           </ul>
         </div>
@@ -41,56 +47,74 @@
     </nav>
   </div>
 
-      {{#block "content"}}
-      <h1>Customers</h1>
+  {{#block "content"}}
 
-<table class="table">
+  {{!-- Customer information with company details --}}
+  <div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">Detailed Customers Information</h1>
+    <a href="/customer/create" class="btn btn-primary btn-sm">Create New Customer</a>
+  </div>
+  <table class="table">
     <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Contact Number</th> <th>Contact Number</th>
-        </tr>
-        {{#each customer}}
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Company Name</th>
+        <th>Contact Number</th>
+        <th>Office Number</th>
+        <th>Company Address</th>
+        <th>Postal Code</th>
+        <th>Edit Actions</th>
+      </tr>
+      {{#each customer}}
     </thead>
     <tbody>
-        <tr>
-            <td>{{first_name}}</td>
-            <td>{{last_name}}</td>
-            <td>{{email}}</td>
-            <td>{{contact_number}}</td>  <td>{{office_number}}</td>
-            <td>
-                <a href="/customer/{{customer_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
-                <a href="/customer/{{customer_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
-            </td>
-        </tr>
-        {{/each}}
+      <tr>
+        <td>{{first_name}}</td>
+        <td>{{last_name}}</td>
+        <td>{{email}}</td>
+        <td>{{company_name}}</td>
+        <td>{{contact_number}}</td>
+        <td>{{office_number}}</td>
+        <td>{{company_address}}</td>
+        <td>{{postal_code}}</td>
+        <td>
+          <a href="/customer/{{customer_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+          <a href="/customer/{{customer_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {{/each}}
     </tbody>
-</table>
+  </table>
 
-<table class="table">
+  {{!-- Company Details --}}
+  <div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">Detailed Customers Information</h1>
+    <a href="/customer/create" class="btn btn-primary btn-sm">Create New Customer</a>
+  </div>
+  <table class="table">
     <tr>
-        <th>Company Name</th>
-        <th>Last Name</th>
-        <th>Postal Code</th>
-        <th>Contact Number</th>
+      <th>Company Name</th>
+      <th>Last Name</th>
+      <th>Postal Code</th>
+      <th>Contact Number</th>
     </tr>
     {{#each company}}
     <tr>
-        <td>{{company_name}}</td>
-        <td>{{company_address}}</td>
-        <td>{{postal_code}}</td>
-        <td>{{office_number}}</td>
+      <td>{{company_name}}</td>
+      <td>{{company_address}}</td>
+      <td>{{postal_code}}</td>
+      <td>{{office_number}}</td>
     </tr>
     {{/each}}
-</table>
+  </table>
 
-      {{/block}}
+  {{/block}}
 
-      <footer>
-              Company Management Systems (c) 2024
-      </footer>
+  <footer>
+    Company Management Systems (c) 2024
+  </footer>
 
 </body>
 

@@ -1,0 +1,18 @@
+{{#extends "base"}}
+
+{{#block "title"}}Delete Company{{/block}}
+
+{{#block "content"}}
+<form method="POST">
+    <div class="alert-danger">
+        Are you sure you want to delete {{company.first_name}} {{company.last_name}}
+        <div>
+            <input type="submit" value="Confirm" class="btn btn-danger"/>
+            <a href="/company" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>
+
+{{/block}}
+
+{{/extends}}

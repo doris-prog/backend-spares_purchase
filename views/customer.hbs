@@ -2,11 +2,15 @@
 
 {{#block "content"}}
 
-<h1>Customers</h1>
+<div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">Customers List</h1>
+    <a href="/customer/create" class="btn btn-primary btn-sm">Create New Customer</a>
+</div>
 
 <table class="table">
     <thead>
         <tr>
+            <th>Customer ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
@@ -16,6 +20,7 @@
     </thead>
     <tbody>
         <tr>
+            <td>{{customer_id}}</td>
             <td>{{first_name}}</td>
             <td>{{last_name}}</td>
             <td>{{email}}</td>

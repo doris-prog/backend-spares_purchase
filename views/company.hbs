@@ -1,0 +1,37 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+
+<div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">Companies List</h1>
+    <a href="/company/create" class="btn btn-primary btn-sm">Create New Company</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Company ID</th>
+            <th>Company Name</th>
+            <th>Company Address</th>
+            <th>Office Number</th>
+        </tr>
+        {{#each company}}
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{company_id}}</td>
+            <td>{{company_name}}</td>
+            <td>{{company_address}}</td>
+            <td>{{office_number}}</td>
+            <td>
+                <a href="/company/{{company_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+                <a href="/company/{{company_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{/block}}
+
+{{/extends}}

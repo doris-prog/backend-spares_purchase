@@ -1,23 +1,35 @@
 {{#extends "base"}}
+
 {{#block "content"}}
-<h1>Add a New Company</h1>
+
+<div style="display: flex; align-items: center; justify-content: left;">
+  <h1 style="margin-right: 10px;">Company List</h1>
+  <a href="/company/create" class="btn btn-primary btn-sm">Create New Company</a>
+</div>
+
 <form method="POST">
   <div class="mb-3">
     <label>Company Name</label>
     <input type="text" class="form-control" name="company_name">
   </div>
-    <div class="mb-3">
+  <div class="mb-3">
     <label>Company Address</label>
     <input type="text" class="form-control" name="company_address">
   </div>
-    <div class="mb-3">
+  <div class="mb-3">
     <label>Postal Code </label>
     <input type="text" class="form-control" name="postal_code ">
   </div>
-    <div class="mb-3">
+  <div class="mb-3">
     <label>Office Number</label>
     <input type="text" class="form-control" name="office_number">
   </div>
 </form>
-{{/block}}  
+{{/block}}
 {{/extends }}
+
+    company_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(100) NOT NULL,
+    company_address VARCHAR(300),
+    postal_code VARCHAR(20),
+    office_number VARCHAR(30)

@@ -41,6 +41,15 @@ async function main() {
     })
   });
 
+  app.get('/', async (req, res) => {
+    const [quotation] = await connection.execute('SELECT * FROM quotation');
+    const [customer] = await connection.execute('SELECT * FROM customer INNER JOIN quotation ON customer.customer_id = quotation.customer_id ORDER BY customer.customer_id ASC');
+    res.render('layouts/base', {
+      quotation,
+      customer
+    })
+  });
+
   app.get('/customer', async (req, res) => {
     const [customer] = await connection.execute('SELECT * FROM customer INNER JOIN company ON customer.company_id = company.company_id ORDER BY first_name ASC');
     res.render('customer', {
@@ -49,8 +58,8 @@ async function main() {
   });
 
   app.get('/quotation', async (req, res) => {
-    const [quotation] = await connection.execute('SELECT * FROM quotation INNER JOIN customer ON quotation.customer_id = customer.customer_id');
-    res.render('quotation/index', {
+    const [quotation] = await connection.execute('SELECT * FROM quotation INNER JOIN customer ON customer.customer_id = quotation.customer_id ORDER BY customer.customer_id ASC');
+    res.render('quotation', {
       quotation
     })
   });
@@ -64,6 +73,15 @@ async function main() {
     })
   });
 
+  app.get('/quotation/create', async (req, res) => {
+    const [quotation] = await connection.execute(`SELECT * FROM quotation`);
+    const [customer] = await connection.execute(`SELECT * FROM customer`);
+    res.render('quotation/create', {
+      quotation,
+      customer
+    })
+  });
+
   app.post('/customer/create', async (req, res) => {
     const { first_name, last_name, email, contact_number, company_id } = req.body;
     const query = 'INSERT INTO customer (first_name, last_name, email, contact_number, company_id) VALUES (?, ?, ?, ?, ?)';
@@ -72,64 +90,105 @@ async function main() {
     res.redirect('/customer');
   });
 
+  app.post('/quotation/create', async (req, res) => {
+    const { quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id } = req.body;
+    const query = 'INSERT INTO quotation (quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id) VALUES (?, ?, ?, ?, ?, ?)';
+    const bindings = [quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id];
+    await connection.execute(query, bindings);
+    res.redirect('/quotation');
+  });
+
   app.get('/customer/:customer_id/edit', async (req, res) => {
     const [customers] = await connection.execute('SELECT * from customer WHERE customer_id=?', [req.params.customer_id]);
     const [company] = await connection.execute('SELECT * from company');
     const customer = customers[0];
     res.render('customer/edit', {
-        customer,
-        company
+      customer,
+      company
     });
-});
+  });
 
-app.post('/customer/:customer_id/edit', async (req, res) => {
-  const { first_name, last_name, email, contact_number, company_id } = req.body;
+  app.get('/quotation/:quote_id/edit', async (req, res) => {
+    const [quotations] = await connection.execute('SELECT * from quotation WHERE customer_id=?', [req.params.customer_id]);
+    const [customer] = await connection.execute('SELECT * from customer');
+    const quotation = quotations[0];
+    res.render('quotation/edit', {
+      customer,
+      quotation
+    })
+  });
 
-  // Log the received company_id for debugging
-  // console.log("Received company_id:", company_id);
+  app.post('/customer/:customer_id/edit', async (req, res) => {
+    const { first_name, last_name, email, contact_number, company_id } = req.body;
 
-  // Convert company_id to a number if it's coming as a string
-  const parsedCompanyId = Number(company_id);
+    // Log the received company_id for debugging
+    // console.log("Received company_id:", company_id);
 
-  // Check if parsedCompanyId is a valid number
-  if (isNaN(parsedCompanyId)) {
+    // Convert company_id to a number if it's coming as a string
+    const parsedCompanyId = Number(company_id);
+
+    // Check if parsedCompanyId is a valid number
+    if (isNaN(parsedCompanyId)) {
       return res.status(400).send('company_id must be a valid integer');
-  }
+    }
 
-  const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
-  const bindings = [first_name, last_name, email, contact_number, parsedCompanyId, req.params.customer_id];
+    const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
+    const bindings = [first_name, last_name, email, contact_number, parsedCompanyId, req.params.customer_id];
 
-  try {
+    try {
       await connection.execute(query, bindings);
       res.redirect('/customer');
-  } catch (error) {
+    } catch (error) {
       console.error("Database error:", error);
       res.status(500).send('An error occurred while updating the customer');
-  }
-});
+    }
+  });
 
-// app.post('/customer/:customer_id/edit', async (req, res) => {
-//     const { first_name, last_name, email, contact_number, company_id } = req.body;
+  app.post('/quotation /:customer_id/edit', async (req, res) => {
+    const { quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id } = req.body;
 
-//     // Ensure company_id is a valid integer if it's coming as a JSON string
-//     let parsedCompanyId;
-//     try {
-//         parsedCompanyId = JSON.parse(company_id)[0]; // Assuming company_id might be in the format '["2007"]'
-//     } catch (error) {
-//         return res.status(400).send('Invalid company_id format');
-//     }
+    // Convert company_id to a number if it's coming as a string
+    const parsedCustomerId = Number(customer_id);
 
-//     // Check if parsedCompanyId is a valid number
-//     if (isNaN(parsedCompanyId)) {
-//         return res.status(400).send('company_id must be a valid integer');
-//     }
+    // Check if parsedCompanyId is a valid number
+    if (isNaN(parsedCustomerId)) {
+      return res.status(400).send('quote_id must be a valid integer');
+    }
 
-//     const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
-//     const bindings = [first_name, last_name, email, contact_number, parsedCompanyId, req.params.customer_id];
+    const query = 'UPDATE quotation SET quoted_date=?, validity_date=?, quoted_amount=?, quoted_quantity=?, customer_id, product_id WHERE customer_id=?';
+    const bindings = [quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id, req.params.customer_id];
 
-//     await connection.execute(query, bindings);
-//     res.redirect('/customer');
-// });
+    try {
+      await connection.execute(query, bindings);
+      res.redirect('/customer');
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).send('An error occurred while updating the customer');
+    }
+  });
+
+  // app.post('/customer/:customer_id/edit', async (req, res) => {
+  //     const { first_name, last_name, email, contact_number, company_id } = req.body;
+
+  //     // Ensure company_id is a valid integer if it's coming as a JSON string
+  //     let parsedCompanyId;
+  //     try {
+  //         parsedCompanyId = JSON.parse(company_id)[0]; // Assuming company_id might be in the format '["2007"]'
+  //     } catch (error) {
+  //         return res.status(400).send('Invalid company_id format');
+  //     }
+
+  //     // Check if parsedCompanyId is a valid number
+  //     if (isNaN(parsedCompanyId)) {
+  //         return res.status(400).send('company_id must be a valid integer');
+  //     }
+
+  //     const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
+  //     const bindings = [first_name, last_name, email, contact_number, parsedCompanyId, req.params.customer_id];
+
+  //     await connection.execute(query, bindings);
+  //     res.redirect('/customer');
+  // });
 
   // app.get('/customer/:customer_id/edit', async (req, res) => {
   //   const [customers] = await connection.execute('SELECT * from customer WHERE customer_id=?', [req.params.customer_id]);
@@ -159,10 +218,24 @@ app.post('/customer/:customer_id/edit', async (req, res) => {
     })
   });
 
-  app.post('/customer/:customer_id/delete', async function (req, res) {
+  app.get('/quotation/:customer_id/delete', async (req, res) => {
+    const [quotations] = await connection.execute("SELECT * FROM quotation WHERE customer_id = ?", [req.params.customer_id]);
+    const quotation = quotations[0];
+    res.render('quotation/delete', {
+      quotation
+    })
+  });
+
+  app.post('/customer/:customer_id/delete', async (req, res) => {
     await connection.execute(`DELETE FROM customer WHERE customer_id = ?`, [req.params.customer_id]);
     res.redirect('/customer');
   });
+
+  app.post('/quotation/:customer_id/delete', async (req, res) => {
+    await connection.execute(`DELETE FROM quotation WHERE customer_id = ?`, [req.params.customer_id]);
+    res.redirect('/quotation');
+  });
+
 }
 
 main();
