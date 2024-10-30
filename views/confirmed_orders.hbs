@@ -1,6 +1,6 @@
 {{#extends "base"}}
 {{#block "content"}}
-<h1>Confirmed Orders</h1>
+<h1>Confirmed Orders List</h1>
 <table class="table">
     <tr>
         <th>Fulfillment Date</th>
@@ -8,7 +8,7 @@
         <th>Required Date</th>
         <th>Quote ID</th>
         <th>Delivery Mode</th>
-        
+
     </tr>
     {{#each confirmed_orders}}
     <tr>
@@ -17,8 +17,15 @@
         <td>{{required_date}}</td>
         <td>{{quote_id}}</td>
         <td>{{delivery_mode}}</td>
+        <td>
+            <a href="/confirmed_orders/{{order_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+            <a href="/confirmed_orders/{{order_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </td>
     </tr>
     {{/each}}
+
 </table>
+
 {{/block}}
+
 {{/extends}}

@@ -88,7 +88,7 @@
     </tbody>
   </table>
 
-{{!-- Confirmed Orders information with quotation details --}}
+  {{!-- Confirmed Orders information with quotation details
   <div style="display: flex; align-items: center; justify-content: left;">
     <h1 style="margin-right: 10px;">Confirmed Orders Detailed Information</h1>
     <a href="/confirmed_orders/create" class="btn btn-primary btn-sm">Create confirmed order</a>
@@ -102,11 +102,11 @@
         <th>Quote ID</th>
         <th>Required Date</th>
         <th>Delivery Mode</th>
-        <th>Company Name</th>
-        <th>Office Number</th>
+        <th>Customer ID</th>
+        <th>Product ID</th>
         <th>Edit Actions</th>
       </tr>
-      {{#each customer}}
+      {{#each confirmed_orders}}
     </thead>
     <tbody>
       <tr>
@@ -116,8 +116,8 @@
         <td>{{quote_id}}</td>
         <td>{{required_date}}</td>
         <td>{{delivery_mode}}</td>
-        <td>{{company_name}}</td>
-        <td>{{office_number}}</td>
+        <td>{{customer_id}}</td>
+        <td>{{product_id}}</td>
         <td>
           <a href="/confirmed_orders/{{order_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
           <a href="/confirmed_orders/{{order_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
@@ -125,15 +125,10 @@
       </tr>
       {{/each}}
     </tbody>
-  </table>
-
-
-
-
-
+  </table> --}}
 
   {{!-- Quotation detailed information with product ID and Customer ID --}}
-  <div style="display: flex; align-items: center; justify-content: left;">
+<div style="display: flex; align-items: center; justify-content: left;">
     <h1 style="margin-right: 10px;">Quotation Detailed Information</h1>
     <a href="/quotation/create" class="btn btn-primary btn-sm">Create New Quote</a>
   </div>

@@ -91,25 +91,26 @@ async function main() {
       const [confirmedOrders] = await connection.execute(`
         SELECT * FROM confirmed_orders INNER JOIN quotation ON confirmed_orders.quote_id = quotation.quote_id ORDER BY confirmed_orders.order_id ASC
       `);
-      
-      const formattedConfirmedOrders = confirmedOrders.map(order => ({ ...order,
+
+      const formattedConfirmedOrders = confirmedOrders.map(order => ({
+        ...order,
         fulfillment_date: formatDate(order.fulfillment_date),
         required_date: formatDate(order.required_date),
       }));
-  
+
       const formattedQuotation = confirmedOrders.map(order => ({
         ...order,
         quoted_date: formatDate(order.quoted_date),
         validity_date: formatDate(order.validity_date),
       }));
-  
-      res.render('quotation', {
+
+      res.render('confirmed_orders', {
         confirmed_orders: formattedConfirmedOrders,
         quotation: formattedQuotation
       });
     } catch (error) {
-      console.error('Error fetching confirmed orders:', error);
-      res.status(500).send('Internal Server Error');
+      console.error('Error reading confirmed orders:', error);
+      res.status(500);
     }
   });
 
@@ -215,22 +216,23 @@ async function main() {
   });
 
   app.get('/confirmed_orders/:order_id/edit', async (req, res) => {
-      const [confirmedOrders] = await connection.execute('SELECT * from confirmed_orders WHERE order_id=?', [req.params.order_id]);
-      const [quotation] = await connection.execute('SELECT * from quotation');
-      const formattedConfirmedOrders = confirmedOrders.map(order => ({ ...order,
-        fulfillment_date: formatDate(order.fulfillment_date),
-        required_date: formatDate(order.required_date),
-      }));
-  
-      const formattedQuotation = confirmedOrders.map(order => ({
-        quoted_date: formatDate(order.quoted_date),
-        validity_date: formatDate(order.validity_date),
-      }));
-  
-      res.render('confirmed_orders/edit', {
-        confirmed_orders: formattedConfirmedOrders,
-        quotation: formattedQuotation
-      });
+    const [confirmedOrders] = await connection.execute('SELECT * from confirmed_orders WHERE order_id=?', [req.params.order_id]);
+    const [quotation] = await connection.execute('SELECT * from quotation');
+    const formattedConfirmedOrders = confirmedOrders.map(order => ({
+      ...order,
+      fulfillment_date: formatDate(order.fulfillment_date),
+      required_date: formatDate(order.required_date),
+    }));
+
+    const formattedQuotation = confirmedOrders.map(order => ({
+      quoted_date: formatDate(order.quoted_date),
+      validity_date: formatDate(order.validity_date),
+    }));
+
+    res.render('confirmed_orders/edit', {
+      confirmed_orders: formattedConfirmedOrders,
+      quotation: formattedQuotation
+    });
   });
 
   app.post('/company/:company_id/edit', async (req, res) => {
@@ -244,16 +246,10 @@ async function main() {
 
   app.post('/customer/:customer_id/edit', async (req, res) => {
     const { first_name, last_name, email, contact_number, company_id } = req.body;
-
-    // Log the received company_id for debugging
-    // console.log("Received company_id:", company_id);
-
-    // Convert company_id to a number if it's coming as a string
     const parsedCompanyId = Number(company_id);
 
-    // Check if parsedCompanyId is a valid number
     if (isNaN(parsedCompanyId)) {
-      return res.status(400).send('company_id must be a valid integer');
+      return res.status(400)
     }
 
     const query = 'UPDATE customer SET first_name=?, last_name=?, email=?, contact_number=?, company_id=? WHERE customer_id=?';
@@ -264,7 +260,7 @@ async function main() {
       res.redirect('/customer');
     } catch (error) {
       console.error("Database error:", error);
-      res.status(500).send('An error occurred while updating the customer');
+      res.status(500).send('Error updating the customer');
     }
   });
 
@@ -274,7 +270,7 @@ async function main() {
     const parsedQuoteId = Number(quote_id);
 
     if (isNaN(parsedQuoteId)) {
-      return res.status(400).send('quote_id must be a valid integer');
+      return res.status(400);
     }
     const query = 'UPDATE quotation SET quoted_date=?, validity_date=?, quoted_amount=?, quoted_quantity=?, customer_id, product_id WHERE quote_id=?';
     const bindings = [quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id, req.params.quote_id];
@@ -284,8 +280,28 @@ async function main() {
       res.redirect('/quotation');
     } catch (error) {
       console.error("Database error:", error);
-      res.status(500).send('An error occurred while updating the quotation');
+      res.status(500).send('Error updating the quotation');
     }
+  });
+
+  app.post('/confirmed_orders/:order_id/edit', async (req, res) => {
+    const [confirmedOrders] = await connection.execute('SELECT * from confirmed_orders WHERE order_id=?', [req.params.order_id]);
+    const [quotation] = await connection.execute('SELECT * from quotation');
+    const formattedConfirmedOrders = confirmedOrders.map(order => ({
+      ...order,
+      fulfillment_date: formatDate(order.fulfillment_date),
+      required_date: formatDate(order.required_date),
+    }));
+
+    const formattedQuotation = confirmedOrders.map(order => ({
+      quoted_date: formatDate(order.quoted_date),
+      validity_date: formatDate(order.validity_date),
+    }));
+
+    res.redirect('confirmed_orders/edit', {
+      confirmed_orders: formattedConfirmedOrders,
+      quotation: formattedQuotation
+    });
   });
 
   app.get('/company/:company_id/delete', async (req, res) => {
