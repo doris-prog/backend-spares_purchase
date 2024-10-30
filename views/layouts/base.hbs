@@ -51,34 +51,34 @@
 
   {{!-- Customer information with company details --}}
   <div style="display: flex; align-items: center; justify-content: left;">
-    <h1 style="margin-right: 10px;">Detailed Customers Information</h1>
+    <h1 style="margin-right: 10px;">Customers Detailed Information</h1>
     <a href="/customer/create" class="btn btn-primary btn-sm">Create New Customer</a>
   </div>
   <table class="table">
     <thead>
       <tr>
+        <th>Customer ID</th>
         <th>First Name</th>
         <th>Last Name</th>
-        <th>Email</th>
-        <th>Company Name</th>
         <th>Contact Number</th>
+        <th>Email</th>
+        <th>Company ID</th>
+        <th>Company Name</th>
         <th>Office Number</th>
-        <th>Company Address</th>
-        <th>Postal Code</th>
         <th>Edit Actions</th>
       </tr>
       {{#each customer}}
     </thead>
     <tbody>
       <tr>
+        <td>{{customer_id}}</td>
         <td>{{first_name}}</td>
         <td>{{last_name}}</td>
-        <td>{{email}}</td>
-        <td>{{company_name}}</td>
         <td>{{contact_number}}</td>
+        <td>{{email}}</td>
+        <td>{{company_id}}</td>
+        <td>{{company_name}}</td>
         <td>{{office_number}}</td>
-        <td>{{company_address}}</td>
-        <td>{{postal_code}}</td>
         <td>
           <a href="/customer/{{customer_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
           <a href="/customer/{{customer_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
@@ -88,27 +88,124 @@
     </tbody>
   </table>
 
-  {{!-- Company Details --}}
+{{!-- Confirmed Orders information with quotation details --}}
   <div style="display: flex; align-items: center; justify-content: left;">
-    <h1 style="margin-right: 10px;">Detailed Customers Information</h1>
-    <a href="/customer/create" class="btn btn-primary btn-sm">Create New Customer</a>
+    <h1 style="margin-right: 10px;">Confirmed Orders Detailed Information</h1>
+    <a href="/confirmed_orders/create" class="btn btn-primary btn-sm">Create confirmed order</a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Fulfillment Date</th>
+        <th>Ordered Amount</th>
+        <th>Quote ID</th>
+        <th>Required Date</th>
+        <th>Delivery Mode</th>
+        <th>Company Name</th>
+        <th>Office Number</th>
+        <th>Edit Actions</th>
+      </tr>
+      {{#each customer}}
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{order_id}}</td>
+        <td>{{fulfillment_date}}</td>
+        <td>{{ordered_amount}}</td>
+        <td>{{quote_id}}</td>
+        <td>{{required_date}}</td>
+        <td>{{delivery_mode}}</td>
+        <td>{{company_name}}</td>
+        <td>{{office_number}}</td>
+        <td>
+          <a href="/confirmed_orders/{{order_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+          <a href="/confirmed_orders/{{order_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+
+
+
+
+
+  {{!-- Quotation detailed information with product ID and Customer ID --}}
+  <div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">Quotation Detailed Information</h1>
+    <a href="/quotation/create" class="btn btn-primary btn-sm">Create New Quote</a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Quote ID</th>
+        <th>Quoted Date</th>
+        <th>Validity Date</th>
+        <th>Quoted Amount</th>
+        <th>Quoted Quantity</th>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Customer ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Contact Number</th>
+        <th>Edit Actions</th>
+      </tr>
+      {{#each quotation}}
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{quote_id}}</td>
+        <td>{{quoted_date}}</td>
+        <td>{{validity_date}}</td>
+        <td>{{quoted_amount}}</td>
+        <td>{{quoted_quantity}}</td>
+        <td>{{product_id}}</td>
+        <td>{{product_name}}</td>
+        <td>{{customer_id}}</td>
+        <td>{{first_name}}</td>
+        <td>{{last_name}}</td>
+        <td>{{email}}</td>
+        <td>{{contact_number}}</td>
+        <td>
+          <a href="/quotation/{{customer_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+          <a href="/quotation/{{customer_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  {{!-- Company Details --}}
+  {{!-- <div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">Companies List</h1>
+    <a href="/company/create" class="btn btn-primary btn-sm">Create New Company</a>
   </div>
   <table class="table">
     <tr>
+      <th>Company ID</th>
       <th>Company Name</th>
       <th>Last Name</th>
       <th>Postal Code</th>
-      <th>Contact Number</th>
+      <th>Office Number</th>
     </tr>
     {{#each company}}
     <tr>
+      <td>{{company_id}}</td>
       <td>{{company_name}}</td>
       <td>{{company_address}}</td>
       <td>{{postal_code}}</td>
       <td>{{office_number}}</td>
+      <td>
+        <a href="/company/{{company_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+        <a href="/company/{{company_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+      </td>
     </tr>
     {{/each}}
-  </table>
+  </table> --}}
 
   {{/block}}
 

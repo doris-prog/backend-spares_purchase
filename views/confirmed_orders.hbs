@@ -1,29 +1,24 @@
 {{#extends "base"}}
-{{#block"content"}}
+{{#block "content"}}
 <h1>Confirmed Orders</h1>
 <table class="table">
     <tr>
         <th>Fulfillment Date</th>
         <th>Ordered Amount</th>
         <th>Required Date</th>
+        <th>Quote ID</th>
         <th>Delivery Mode</th>
+        
     </tr>
     {{#each confirmed_orders}}
     <tr>
         <td>{{fulfillment_date}}</td>
         <td>{{ordered_amount}}</td>
         <td>{{required_date}}</td>
+        <td>{{quote_id}}</td>
         <td>{{delivery_mode}}</td>
     </tr>
     {{/each}}
 </table>
 {{/block}}
 {{/extends}}
-
-    order_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    fulfillment_date DATE,
-    ordered_amount DECIMAL (10,2),
-    quote_id INT UNSIGNED,
-    required_date DATE,
-    delivery_mode VARCHAR(45),
-    FOREIGN KEY (quote_id) REFERENCES quotation(quote_id)

@@ -27,7 +27,7 @@
             {{#each company}}
                 <option value="{{company_id}}" 
                 {{#eq company_id ../customer.company_id}}selected{{/eq}}>
-                    {{company_name}}</option>
+                    {{company_id}} - {{company_name}}</option>
             {{/each}}
         </select>
     </div>

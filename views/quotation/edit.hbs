@@ -1,0 +1,49 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+
+<h1>Edit Quotation</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Quoted Date</label>
+        <input type="text" class="form-control" name="quoted_date" value="{{quotation.quoted_date}}">
+    </div>
+    <div class="mb-3">
+        <label>Validity Date</label>
+        <input type="text" class="form-control" name="validity_date" value="{{quotation.validity_date}}">
+    </div>
+    <div class="mb-3">
+        <label>Quoted Amount</label>
+        <input type="text" class="form-control" name="email" value="{{quotation.quoted_amount}}">
+    </div>
+    <div class="mb-3">
+        <label>Quoted Quantity</label>
+        <input type="text" class="form-control" name="contact_number" value="{{customer.contact_number}}">
+    </div>
+    <div class="mb-3">
+        <label>Customer ID</label>
+        <select name="customer_id" class="form-control">
+            {{#each quotation}}
+            <option value="{{customer_id}}" {{#eq customer_id ../customer.customer_id}}selected{{/eq}}>
+                {{company_name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Product ID</label>
+        <select name="product_id" class="form-control">
+            {{#each quotation}}
+            <option value="{{product_id}}" {{#eq product_id ../inventory.product_id}}selected{{/eq}}>
+                {{product_name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Quotation</button>
+</form>
+
+{{/block}}
+
+{{/extends}}
+
+quote_id, quoted_date, validity_date, quoted_amount, quoted_quantity, customer_id, product_id

@@ -1,0 +1,34 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+
+<h1>Edit Confirmed Order</h1>
+
+<form method="POST">
+    <div class="mb-3">
+        <label>Fulfillment Date</label>
+        <input type="text" class="form-control" name="fulfillment_date" value="{{confirmed_orders.fulfillment_date}}">
+    </div>
+    <div class="mb-3">
+        <label>Ordered Amount</label>
+        <input type="text" class="form-control" name="ordered_amount" value="{{confirmed_orders.ordered_amount}}">
+    </div>
+    <div class="mb-3">
+        <label>Quote ID</label>
+        <input type="text" class="form-control" name="required_date" value="{{confirmed_orders.quote_id}}">
+    </div>
+    <div class="mb-3">
+        <label>Required Date</label>
+        <input type="text" class="form-control" name="required_date" value="{{confirmed_orders.required_date}}">
+    </div>
+    <div class="mb-3">
+        <label>Delivery Mode</label>
+        <input type="text" class="form-control" name="delivery_mode" value="{{confirmed_orders.delivery_mode}}">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Confirmed Order</button>
+</form>
+
+{{/block}}
+
+{{/extends}}
+

@@ -18,18 +18,15 @@
   </div>
   <div class="mb-3">
     <label>Postal Code </label>
-    <input type="text" class="form-control" name="postal_code ">
+    <input type="text" class="form-control" name="postal_code">
   </div>
   <div class="mb-3">
     <label>Office Number</label>
     <input type="text" class="form-control" name="office_number">
   </div>
+  <button type="submit" class="btn btn-primary">Add Company</button>
 </form>
-{{/block}}
-{{/extends }}
 
-    company_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    company_address VARCHAR(300),
-    postal_code VARCHAR(20),
-    office_number VARCHAR(30)
+{{/block}}
+
+{{/extends }}

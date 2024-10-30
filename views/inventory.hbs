@@ -1,0 +1,36 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+
+<div style="display: flex; align-items: center; justify-content: left;">
+    <h1 style="margin-right: 10px;">InStock Lists</h1>
+    <a href="/inventory/create" class="btn btn-primary btn-sm">Create New Product</a>
+</div>
+
+<table class="table">
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Instock</th>
+        <th>Product Weight</th>
+        <th>Product Size</th>
+        <th>Edit Actions</th>
+    </tr>
+    {{#each inventory}}
+    <tr>
+        <td>{{product_id}}</td>
+        <td>{{product_name}}</td>
+        <td>{{instock}}</td>
+        <td>{{product_weight}}</td>
+        <td>{{product_size}}</td>
+        <td>
+            <a href="/inventory/{{product_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+            <a href="/inventory/{{product_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+    </tr>
+    {{/each}}
+</table>
+
+{{/block}}
+
+{{/extends}}

@@ -13,7 +13,9 @@
             <th>Company ID</th>
             <th>Company Name</th>
             <th>Company Address</th>
+            <th>Postal Code</th>
             <th>Office Number</th>
+            <th>Edit Actions</th>
         </tr>
         {{#each company}}
     </thead>
@@ -22,6 +24,7 @@
             <td>{{company_id}}</td>
             <td>{{company_name}}</td>
             <td>{{company_address}}</td>
+            <td>{{postal_code}}</td>
             <td>{{office_number}}</td>
             <td>
                 <a href="/company/{{company_id}}/edit" class="btn btn-primary btn-sm">Edit</a>

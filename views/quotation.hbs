@@ -1,0 +1,40 @@
+{{#extends "base"}}
+{{#block "content"}}
+
+<h1>Quotation Lists</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Quote ID</th>
+            <th>Quoted Date</th>
+            <th>Validity Date</th>
+            <th>Quoted Amount</th>
+            <th>Quoted Quantity</th>
+            <th>Customer ID</th>
+            <th>Product ID</th>
+            <th>Edit Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each quotation}}
+        <tr>
+            <td>{{quote_id}}</td>
+            <td>{{quoted_date}}</td>
+            <td>{{validity_date}}</td>
+            <td>{{quoted_amount}}</td>
+            <td>{{quoted_quantity}}</td>
+            <td>{{customer_id}}</td>
+            <td>{{product_id}}</td>
+            <td>
+                <a href="/quotation/{{quote_id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+                <a href="/quotation/{{quote_id}}/delete" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{/block}}
+
+{{/extends}}

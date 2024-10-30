@@ -1,6 +1,9 @@
 {{#extends "base"}}
+
 {{#block "content"}}
-<h1>Add New Confirmed Order</h1>
+
+<h1>Add Confirmed Order</h1>
+
 <form method="POST">
   <div class="mb-3">
     <label>Fulfillment Date</label>
@@ -15,17 +18,14 @@
     <input type="text" class="form-control" name="required_date">
   </div>
     <div class="mb-3">
-    <label>Delivery Mode </label>
+    <label>Delivery Mode</label>
     <input type="text" class="form-control" name="delivery_mode">
   </div>
-    <div class="mb-3">
+      <div class="mb-3">
     <label>Quote ID</label>
-    <select name="quote_id" class="form-control">
-    {{#each quotation}}
-    <option value="{{quote_id}}">{{name}}</option>
-    {{/each}}
-    </select>
+    <input type="text" class="form-control" name="quote_id">
   </div>
+
   <button type="submit" class="btn btn-primary">Add confirmed order</button>
 </form>
 {{/block}}  
